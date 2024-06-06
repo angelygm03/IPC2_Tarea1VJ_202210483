@@ -50,16 +50,73 @@ def menu_crud_profesores():
         print("Opción inválida. Inténtalo de nuevo")
 
 def crear_profesor():
-    pass
-
+    nombre = input("Ingresa el nombre del profesor: ")
+    curso = input("Ingresa el curso que imparte el profesor: ")
+    codigo = input("Ingresa el código del profesor: ")
+    profesion = input("Ingresa la profesión del profesor: ")
+    
+    nuevo_profesor = Profesor(nombre, curso, codigo, profesion)
+    profesores.append(nuevo_profesor)
+    print("¡Profesor creado exitosamente!")
+    print(profesores) #para verificar que se agregan a la lista
+    
 def leer_profesores():
-    pass
+    print()
+    print('----------------- PROFESORES -----------------')
+    if len(profesores) == 0:
+        print('No hay profesores registrados en el programa')
+        return
+    
+    for profesor in profesores:
+        json_string = '''
+{
+    "nombre": "''' + profesor.nombre + '''",
+    "curso": "''' + profesor.curso + '''",
+    "codigo": "''' + profesor.codigo + '''",
+    "profesion": "''' + profesor.profesion + '''"
+}
+'''
+        print(json_string)
 
 def actualizar_profesor():
-    pass
+    codigo = input("Ingresa el código del profesor a actualizar: ")
+    profesor_encontrado = None
+    
+    for profesor in profesores:
+        if profesor.codigo == codigo:
+            profesor_encontrado = profesor
+            break
+    
+    if profesor_encontrado is None:
+        print("Error: No se encontró un profesor con el código ingresado.")
+        return
+    
+    nombre = input("Ingresa el nuevo nombre del profesor: ")
+    curso = input("Ingresa el nuevo curso que imparte el profesor: ")
+    profesion = input("Ingresa la nueva profesión del profesor: ")
+    
+    profesor_encontrado.nombre = nombre
+    profesor_encontrado.curso = curso
+    profesor_encontrado.profesion = profesion
+    
+    print("¡Profesor actualizado exitosamente!")
 
 def eliminar_profesor():
-    pass
+    print()
+    codigo = input("Ingresa el código del profesor que deseas eliminar: ")
+    profesor_encontrado = None
+    
+    for profesor in profesores:
+        if profesor.codigo == codigo:
+            profesor_encontrado = profesor
+            break
+    
+    if profesor_encontrado is None:
+        print("Error: No se encontró un profesor con el código ingresado.")
+        return
+    
+    profesores.remove(profesor_encontrado)
+    print("¡Profesor eliminado exitosamente!")
 
 #Menú Estudiantes
 def menu_crud_estudiantes():
