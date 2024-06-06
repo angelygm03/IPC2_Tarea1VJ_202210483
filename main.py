@@ -1,6 +1,8 @@
 from usuario import Usuario
 from profesor import Profesor
 from estudiante import Estudiante
+import sys
+
 
 profesores = []
 estudiantes = []
@@ -22,8 +24,11 @@ def main():
             menu_crud_estudiantes()
         elif respuesta == "3":
             print("¡Hasta luego!")
+            print()
+            break
         else:
             print("Opción inválida. Inténtalo de nuevo")
+    sys.exit()
 
 #Menú profesores            
 def menu_crud_profesores():
@@ -76,7 +81,8 @@ def leer_profesores():
     print('------------------- PROFESORES -------------------')
     if len(profesores) == 0:
         print('No hay profesores registrados en el programa')
-        return
+        print()
+        menu_crud_profesores()
 
     json_list = []
     for profesor in profesores:
@@ -158,7 +164,7 @@ def eliminar_profesor():
 
 #Menú Estudiantes
 def menu_crud_estudiantes():
-    print("----------------- Menú Estudiantes -----------------")
+    print("---------------- Menú Estudiantes ----------------")
     print("1. Crear Estudiante")
     print("2. Leer Estudiantes")
     print("3. Actualizar Estudiante")
@@ -176,16 +182,25 @@ def menu_crud_estudiantes():
     elif respuestaEst == "4":
         eliminar_estudiante()
     elif respuestaEst == "5":
+        print()
         main()
     else:
         print("Opción inválida. Inténtalo de nuevo")
 
 def crear_estudiante():
+    print()
+    print("---------------- Crear Estudiante ----------------")
     nombre = input("Ingresa el nombre del estudiante: ")
     curso = input("Ingresa el curso que cursa el estudiante: ")
-    carnet = input("Ingresa el carnet del estudiante: ")
+    while True:
+        try:
+            carnet = int(input("Ingresa el carnet del estudiante: "))
+            break
+        except ValueError:
+            print("Error: El carnet debe ser un número entero.")
+
     carrera = input("Ingresa la carrera del estudiante: ")
-    
+
     nuevo_estudiante = Estudiante(nombre, curso, carnet, carrera)
     estudiantes.append(nuevo_estudiante)
     print("¡Estudiante creado exitosamente!")
@@ -194,26 +209,38 @@ def crear_estudiante():
 
 def leer_estudiantes():
     print()
-    print('----------------- ESTUDIANTES -----------------')
+    print('------------------ ESTUDIANTES -------------------')
     if len(estudiantes) == 0:
         print('No hay estudiantes registrados en el programa')
-        return
-    
+        print()
+        menu_crud_estudiantes()
+
+    json_list = []
     for estudiante in estudiantes:
         json_string = '''
 {
     "nombre": "''' + estudiante.nombre + '''",
     "curso": "''' + estudiante.curso + '''",
-    "carnet": "''' + estudiante.carnet + '''",
+    "carnet": "''' + str(estudiante.carnet) + '''",
     "carrera": "''' + estudiante.carrera + '''"
-}
-'''
-        print(json_string)
+}'''
+        json_list.append(json_string)
+    
+    json_output = '[\n' + ',\n'.join(json_list) + '\n]'
+    print(json_output)
+    print()
+    menu_crud_estudiantes()
+
+def actualizar_estudiante():
+    print()
+    print('------------- Actualizar Estudiante --------------')
+    try:
+        carnet = int(input("Ingresa el carnet del estudiante que deseas actualizar: "))
+    except ValueError:
+        print("Error: El carnet debe ser un número entero.")
         print()
         menu_crud_estudiantes()
 
-def actualizar_estudiante():
-    carnet = input("Ingresa el carnet del estudiante que deseas actualizar: ")
     estudiante_encontrado = None
     
     for estudiante in estudiantes:
@@ -223,7 +250,8 @@ def actualizar_estudiante():
     
     if estudiante_encontrado is None:
         print("Error: No se encontró un estudiante con el carnet ingresado.")
-        return
+        print()
+        menu_crud_estudiantes()
     
     nombre = input("Ingresa el nuevo nombre del estudiante: ")
     curso = input("Ingresa el nuevo curso que toma el estudiante: ")
@@ -238,7 +266,15 @@ def actualizar_estudiante():
     menu_crud_estudiantes()
 
 def eliminar_estudiante():
-    carnet = input("Ingresa el carnet del estudiante que deseas eliminar: ")
+    print()
+    print('-------------- Eliminar Estudiante ---------------')
+    try:
+        carnet = int(input("Ingresa el carnet del estudiante que deseas eliminar: "))
+    except ValueError:
+        print("Error: El carnet debe ser un número entero.")
+        print()
+        menu_crud_estudiantes()
+    
     estudiante_encontrado = None
     
     for estudiante in estudiantes:
@@ -248,8 +284,9 @@ def eliminar_estudiante():
 
     if estudiante_encontrado is None:
         print("Error: No se encontró un estudiante con el carnet ingresado.")
-        return
-    
+        print()
+        menu_crud_estudiantes()
+
     estudiantes.remove(estudiante_encontrado)
     print("¡Estudiante eliminado exitosamente!")
     print()
