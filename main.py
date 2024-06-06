@@ -59,7 +59,7 @@ def crear_profesor():
     profesores.append(nuevo_profesor)
     print("¡Profesor creado exitosamente!")
     print(profesores) #para verificar que se agregan a la lista
-    
+
 def leer_profesores():
     print()
     print('----------------- PROFESORES -----------------')
@@ -143,16 +143,72 @@ def menu_crud_estudiantes():
         print("Opción inválida. Inténtalo de nuevo")
 
 def crear_estudiante():
-    pass
+    nombre = input("Ingresa el nombre del estudiante: ")
+    curso = input("Ingresa el curso que cursa el estudiante: ")
+    carnet = input("Ingresa el carnet del estudiante: ")
+    carrera = input("Ingresa la carrera del estudiante: ")
+    
+    nuevo_estudiante = Estudiante(nombre, curso, carnet, carrera)
+    estudiantes.append(nuevo_estudiante)
+    print("¡Estudiante creado exitosamente!")
+    print(estudiantes) #solo para verificar que se agregan los estudiantes
 
 def leer_estudiantes():
-    pass
+    print()
+    print('----------------- ESTUDIANTES -----------------')
+    if len(estudiantes) == 0:
+        print('No hay estudiantes registrados en el programa')
+        return
+    
+    for estudiante in estudiantes:
+        json_string = '''
+{
+    "nombre": "''' + estudiante.nombre + '''",
+    "curso": "''' + estudiante.curso + '''",
+    "carnet": "''' + estudiante.carnet + '''",
+    "carrera": "''' + estudiante.carrera + '''"
+}
+'''
+        print(json_string)
 
 def actualizar_estudiante():
-    pass
+    carnet = input("Ingresa el carnet del estudiante que deseas actualizar: ")
+    estudiante_encontrado = None
+    
+    for estudiante in estudiantes:
+        if estudiante.carnet == carnet:
+            estudiante_encontrado = estudiante
+            break
+    
+    if estudiante_encontrado is None:
+        print("Error: No se encontró un estudiante con el carnet ingresado.")
+        return
+    
+    nombre = input("Ingresa el nuevo nombre del estudiante: ")
+    curso = input("Ingresa el nuevo curso que toma el estudiante: ")
+    carrera = input("Ingresa la nueva carrera del estudiante: ")
+    
+    estudiante_encontrado.nombre = nombre
+    estudiante_encontrado.curso = curso
+    estudiante_encontrado.carrera = carrera
+    
+    print("¡Estudiante actualizado exitosamente!")
 
 def eliminar_estudiante():
-    pass
+    carnet = input("Ingresa el carnet del estudiante que deseas eliminar: ")
+    estudiante_encontrado = None
+    
+    for estudiante in estudiantes:
+        if estudiante.carnet == carnet:
+            estudiante_encontrado = estudiante
+            break
+
+    if estudiante_encontrado is None:
+        print("Error: No se encontró un estudiante con el carnet ingresado.")
+        return
+    
+    estudiantes.remove(estudiante_encontrado)
+    print("¡Estudiante eliminado exitosamente!")
 
 if __name__ == "__main__":
     main()
