@@ -28,6 +28,7 @@ def main():
             break
         else:
             print("Opción inválida. Inténtalo de nuevo")
+            print()
     sys.exit()
 
 #Menú profesores            
@@ -54,6 +55,8 @@ def menu_crud_profesores():
         main()
     else:
         print("Opción inválida. Inténtalo de nuevo")
+        print()
+        menu_crud_profesores()
 
 def crear_profesor():
     print()
@@ -186,6 +189,8 @@ def menu_crud_estudiantes():
         main()
     else:
         print("Opción inválida. Inténtalo de nuevo")
+        print()
+        menu_crud_estudiantes()
 
 def crear_estudiante():
     print()
